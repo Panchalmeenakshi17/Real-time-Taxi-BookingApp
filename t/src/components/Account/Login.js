@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, TextInput, Text, View, ScrollView, TouchableOpacity, TouchableWithoutFeedback, Alert, ActivityIndicator } from 'react-native';
 import { initializeApp } from '@react-native-firebase/app';
-import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
@@ -32,34 +32,58 @@ const Login = ({ navigation }) => {
     try {
       setLoading(true);
 
-      const signInRef = firestore().collection('Users');
-      const userSnapshot = await signInRef.where('email', '==', email).get();
-
-      if (userSnapshot.empty) {
+      // Validate email and password
+      if (!email || !password) {
         setLoading(false);
-        Alert.alert('User not found', 'Please sign up first.');
+        Alert.alert('Invalid Input', 'Please enter both email and password.');
+        return;
+      }
+
+      // Sign in with Firebase authentication
+      const userCredential = await auth().signInWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+
+      // Check if the user's email is verified
+      if (user.emailVerified) {
+        // Store user email in AsyncStorage
+        await AsyncStorage.setItem('userEmail', email);
+
+        // Set user as logged in
+        await AsyncStorage.setItem('userLoggedIn', 'true');
+
+        setLoading(false);
+       
+        navigation.navigate('TabNavigator'); // Navigate to the 'TabNavigator'
       } else {
-        const user = userSnapshot.docs[0].data();
-
-        if (user.password === password) {
-          // Store user email in AsyncStorage
-          await AsyncStorage.setItem('userEmail', email);
-
-          // Set user as logged in
-          await AsyncStorage.setItem('userLoggedIn', 'true');
-
-          setLoading(false);
-          Alert.alert('Logging you In!');
-          navigation.navigate('TabNavigator'); // Navigate to the 'TabNavigator'
-        } else {
-          setLoading(false);
-          Alert.alert('Incorrect Password', 'Please enter the correct password.');
-        }
+        setLoading(false);
+        Alert.alert('Email Not Verified', 'Please verify your email before logging in.');
       }
     } catch (error) {
       setLoading(false);
       console.error('Error during login:', error);
-      Alert.alert('Error', 'Failed to log in. Please try again.');
+
+      // Check the error code to provide specific error messages
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        Alert.alert('Invalid Credentials', 'Please enter the correct email and password.');
+      } else {
+        Alert.alert('Error', 'Failed to log in. Please try again.');
+      }
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    try {
+      // Validate email
+      if (!email) {
+        Alert.alert('Invalid Input', 'Please enter your email to reset the password.');
+        return;
+      }
+
+      await auth().sendPasswordResetEmail(email);
+      Alert.alert('Password Reset Email Sent', 'Please check your email to reset your password.');
+    } catch (error) {
+      console.error('Error sending password reset email:', error);
+      Alert.alert('Error', 'Failed to send password reset email. Please try again.');
     }
   };
 
@@ -108,6 +132,11 @@ const Login = ({ navigation }) => {
               <Text style={styles.buttonText}>Login</Text>
             )}
           </TouchableOpacity>
+          <TouchableOpacity onPress={handleForgotPassword}>
+            <Text style={{ fontFamily: 'Montserrat-SemiBold', color: '#fea90a', marginTop: 10, textDecorationLine: 'underline', letterSpacing: 1, fontSize: 18 }}>
+              Forgot Password?
+            </Text>
+          </TouchableOpacity>
         </View>
         <View>
           <TouchableOpacity onPress={() => { navigation.navigate('Signin') }}>
@@ -119,6 +148,8 @@ const Login = ({ navigation }) => {
   );
 };
 
+
+
 const styles = StyleSheet.create({
   scrollView: {
     flexGrow: 1,
@@ -129,18 +160,22 @@ const styles = StyleSheet.create({
     marginTop: 60,
   },
   heading: {
+    textDecorationLine:'underline',
     fontSize: 28,
     textAlign: 'center',
     marginVertical: 65,
     fontFamily: 'Montserrat-SemiBold',
   },
   sheading: {
-    fontSize: 18,
+    fontSize: 19,
     textAlign: 'center',
-    marginVertical: -26,
+bottom:30,
+
+
     fontFamily: 'Montserrat-Regular',
   },
   textField: {
+    bottom:50,
     marginVertical: 65,
     paddingHorizontal: 30,
     width: '100%',
@@ -148,15 +183,20 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: 'Montserrat-SemiBold',
     paddingHorizontal: 2,
+    letterSpacing:1,
+    marginBottom:20,
+    textDecorationLine:'underline',
+    fontSize:17,
   },
   input: {
-    height: 40,
+    letterSpacing:2,
+    height: 50,
     borderColor: 'gray',
     borderWidth: 1,
     width: '100%',
     padding: 10,
     marginBottom: 16,
-    borderRadius: 7,
+    borderRadius: 17,
     fontFamily: 'Montserrat-Regular',
   },
   passwordContainer: {
@@ -165,12 +205,13 @@ const styles = StyleSheet.create({
   },
   passwordInput: {
     flex: 1,
-    height: 40,
+    letterSpacing:2,
+    height: 50,
     borderColor: 'gray',
     borderWidth: 1,
     padding: 10,
     marginBottom: 16,
-    borderRadius: 7,
+    borderRadius: 17,
     fontFamily: 'Montserrat-Regular',
   },
   eyeIcon: {
@@ -180,7 +221,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#fea90a',
-    paddingVertical: 15,
+    paddingVertical: 10,
     paddingHorizontal: 30,
     width: '100%',
     borderRadius: 30,
@@ -190,7 +231,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 18,
+    letterSpacing:1,
+    fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
     fontFamily: 'Montserrat-Regular',

@@ -91,40 +91,41 @@ const ProfileScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [emailInputValue, setEmailInputValue] = useState('');
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const email = await AsyncStorage.getItem('userEmail');
+ 
+useEffect(() => {
+  const fetchUserData = async () => {
+    try {
+      const email = await AsyncStorage.getItem('userEmail');
 
-        if (!email) {
-          console.log('Email not found in AsyncStorage');
-          setLoading(false);
-          return;
-        }
-
-        const userDataSnapshot = await firestore().collection('Users').where('email', '==', email).get();
-
-        if (!userDataSnapshot.empty) {
-          const userDataFromDB = userDataSnapshot.docs[0].data();
-          setDisplayedUserData(userDataFromDB);
-
-          const userPostsArray = userDataFromDB.posts || [];
-          setUserPosts(userPostsArray);
-        } else {
-          console.log('No documents found matching the email:', email);
-        }
-
-        setEmailInputValue(email);
-
+      if (!email) {
+        console.log('Email not found in AsyncStorage');
         setLoading(false);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-        setLoading(false);
+        return;
       }
-    };
 
-    fetchUserData();
-  }, []);
+      const userDataSnapshot = await firestore().collection('Signin').where('signupEmail', '==', email).get();
+
+      if (!userDataSnapshot.empty) {
+        const userDataFromDB = userDataSnapshot.docs[0].data();
+        setDisplayedUserData(userDataFromDB);
+
+        const userPostsArray = userDataFromDB.posts || [];
+        setUserPosts(userPostsArray);
+      } else {
+        console.log('No documents found matching the email:', email);
+      }
+
+      setEmailInputValue(email);
+
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      setLoading(false);
+    }
+  };
+
+  fetchUserData();
+}, []);
 
   const handleLogout = async () => {
     try {
@@ -160,6 +161,19 @@ const ProfileScreen = ({ navigation }) => {
       </View>
 
       <View style={commonStyles.userDataContainer}>
+      <Text style={commonStyles.userData}>Username:</Text>
+        <TextInput
+          style={commonStyles.usernameInput}
+          value={displayedUserData?.username}
+          editable={false}
+        />
+
+<Text style={commonStyles.userData}>Phone:</Text>
+        <TextInput
+          style={commonStyles.usernameInput}
+          value={displayedUserData?.phoneNumber}
+          editable={false}
+        />
         <Text style={commonStyles.userData}>Email:</Text>
         <TextInput
           style={commonStyles.emailInput}
@@ -169,16 +183,12 @@ const ProfileScreen = ({ navigation }) => {
         <Text style={commonStyles.userData}>Password:</Text>
         <TextInput
           style={commonStyles.passwordInput}
-          value={displayedUserData?.password}
+          value={displayedUserData?.signupPassword}
           editable={false}
           secureTextEntry={true}
         />
-        <Text style={commonStyles.userData}>Username:</Text>
-        <TextInput
-          style={commonStyles.usernameInput}
-          value={displayedUserData?.username}
-          editable={false}
-        />
+       
+       
       </View>
 
        
