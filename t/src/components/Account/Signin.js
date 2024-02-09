@@ -57,7 +57,7 @@ const ProfileScreen = ({ navigation }) => {
         <View>
           <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', backgroundColor: '#abaaa96a', borderRadius: 100, marginLeft: 100, height: 140, width: 140, borderColor: 'black' }}>
             <Image
-              source={require('../assets/app_images/p.jpg')}
+              source={require('../../assets/app_images/p.jpg')}
               style={styles.backgroundImage}
             />
           </TouchableOpacity>

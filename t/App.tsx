@@ -24,6 +24,7 @@ import Map from './src/components/Maps/Maps';
 import ProfileScreen from './src/screens/ProfileScreen';
 import AfterDestination from './src/screens/AfterDestination';
 import ChatScreen from './src/screens/ChatScreen';
+import ProfilePage from './src/components/ProfiletabNavigator/ProfilePage';
  
 
 
@@ -45,8 +46,8 @@ const App = () => {
     <Stack.Screen name='Otp' component={Otp} options={{animation: 'fade_from_bottom'}}></Stack.Screen> */}
     {/* <Stack.Screen name='Profile' component={Profile} options={{animation: 'fade_from_bottom'}}></Stack.Screen>   */}
     {/* <Stack.Screen name='AppNavigator' component={AppNavigator} options={{animation: 'fade_from_bottom'}}></Stack.Screen>   */}
-          
-          <Stack.Screen name='ProfileScreen' component={ProfileScreen} options={{animation: 'slide_from_bottom'}}></Stack.Screen>  
+    <Stack.Screen name='Login' component={Login} options={{animation: 'fade_from_bottom'}}></Stack.Screen> 
+          {/* <Stack.Screen name='ProfileScreen' component={ProfileScreen} options={{animation: 'slide_from_bottom'}}></Stack.Screen>   */}
     <Stack.Screen name='Destination' component={Destination} options={{animation: 'fade_from_bottom'}}></Stack.Screen>  
     <Stack.Screen name='Home' component={Home} options={{animation: 'fade_from_bottom'}}></Stack.Screen>  
           <Stack.Screen name='AfterDestination' component={AfterDestination} options={{animation: 'slide_from_bottom'}}></Stack.Screen>  
@@ -56,6 +57,9 @@ const App = () => {
         </Stack.Screen>
         <Stack.Screen name='Payment' component={PaymentScreen} options={{animation: 'slide_from_bottom'}}>
         </Stack.Screen>  
+        <Stack.Screen name='ProfilePage' component={ProfilePage} options={{animation: 'slide_from_bottom'}}>
+        </Stack.Screen>  
+        <Stack.Screen name='Signin' component={Signin} options={{animation: 'fade_from_bottom'}}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
     

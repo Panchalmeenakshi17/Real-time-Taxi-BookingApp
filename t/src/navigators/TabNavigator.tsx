@@ -15,7 +15,7 @@ import ChatScreen from '../screens/ChatScreen'
 
 const Tab = createBottomTabNavigator();
 
-const TabNavigator = () => {
+const TabNavigator = ({route}) => {
   return (
    <>
     <Tab.Navigator

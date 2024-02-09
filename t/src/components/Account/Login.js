@@ -1,59 +1,67 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TextInput, Text,Image, View, ScrollView,TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
-// import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, TextInput, Text, View, ScrollView, TouchableOpacity, TouchableWithoutFeedback, Alert, ActivityIndicator } from 'react-native';
 import { initializeApp } from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
-import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-const Login = ({navigation}) => {
- 
+const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Check if the user is already logged in
+    checkLoggedInStatus();
+  }, []);
+
+  const checkLoggedInStatus = async () => {
+    try {
+      const userLoggedIn = await AsyncStorage.getItem('userLoggedIn');
+
+      if (userLoggedIn === 'true') {
+        // User is already logged in, navigate to 'TabNavigator'
+        navigation.navigate('TabNavigator');
+      }
+    } catch (error) {
+      console.error('Error checking login status:', error);
+    }
+  };
 
   const handleContinue = async () => {
     try {
+      setLoading(true);
+
       const signInRef = firestore().collection('Users');
-  
-      // Check if the email exists
       const userSnapshot = await signInRef.where('email', '==', email).get();
-  
+
       if (userSnapshot.empty) {
-        // Email does not exist, show error message
+        setLoading(false);
         Alert.alert('User not found', 'Please sign up first.');
       } else {
-        // Email exists, check the password
         const user = userSnapshot.docs[0].data();
-  
+
         if (user.password === password) {
-          // Password is correct, navigate to the 'Home' screen
+          // Store user email in AsyncStorage
+          await AsyncStorage.setItem('userEmail', email);
+
+          // Set user as logged in
+          await AsyncStorage.setItem('userLoggedIn', 'true');
+
+          setLoading(false);
           Alert.alert('Logging you In!');
-          navigation.navigate('TabNavigator', { username: user.username });
+          navigation.navigate('TabNavigator'); // Navigate to the 'TabNavigator'
         } else {
-          // Password is incorrect, show error message
+          setLoading(false);
           Alert.alert('Incorrect Password', 'Please enter the correct password.');
         }
       }
     } catch (error) {
+      setLoading(false);
       console.error('Error during login:', error);
       Alert.alert('Error', 'Failed to log in. Please try again.');
     }
   };
-  useEffect(() => {
-    
-    const firebaseConfig = {
-        apiKey: "AIzaSyDyq8vOFb3uYwUx70Dn6L-8hSMOV2W0CLU",
-        authDomain: 'cabdb-f94fb.firebaseapp.com	',
-        projectId: "cabdb-f94fb",
-        storageBucket: "cabdb-f94fb.appspot.com",
-        messagingSenderId: '790277514504',
-        appId: "1:790277514504:android:404b4513042e15ff9ab8bd",
-      };
-    initializeApp(firebaseConfig);
-  }, []);
-
-
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!isPasswordVisible);
@@ -67,8 +75,6 @@ const Login = ({navigation}) => {
           Thank you for again Re-starting your Journey with us!
         </Text>
         <View style={styles.textField}>
-           
-          {/* Email */}
           <View>
             <Text style={styles.label}>Email</Text>
             <TextInput
@@ -78,11 +84,10 @@ const Login = ({navigation}) => {
               onChangeText={(text) => setEmail(text)}
             />
           </View>
-          {/* Password */}
           <View>
             <Text style={styles.label}>Password</Text>
             <View style={styles.passwordContainer}>
-            <TextInput
+              <TextInput
                 style={styles.passwordInput}
                 placeholder="Enter your password"
                 secureTextEntry={!isPasswordVisible}
@@ -96,68 +101,59 @@ const Login = ({navigation}) => {
               </TouchableWithoutFeedback>
             </View>
           </View>
-          <TouchableOpacity onPress={handleContinue} style={styles.button}>
-            <Text style={styles.buttonText}>Login</Text>
+          <TouchableOpacity onPress={handleContinue} style={styles.button} disabled={loading}>
+            {loading ? (
+              <ActivityIndicator color="white" />
+            ) : (
+              <Text style={styles.buttonText}>Login</Text>
+            )}
           </TouchableOpacity>
         </View>
-      
-      <View>
-      <TouchableOpacity onPress={()=>{navigation.navigate('Signin')}}>
-      <Text style={{ fontFamily:'Montserrat-SemiBold',  justifyContent:'center', marginTop:0, }}> Don't have an account? <Text style={{fontFamily:'Montserrat-SemiBold', color:'#fea90a', textDecorationLine:'underline' }}>Sign In</Text></Text> 
-      </TouchableOpacity> 
-      </View>
+        <View>
+          <TouchableOpacity onPress={() => { navigation.navigate('Signin') }}>
+            <Text style={{ fontFamily: 'Montserrat-SemiBold', justifyContent: 'center', marginTop: 0, }}> Don't have an account? <Text style={{ fontFamily: 'Montserrat-SemiBold', color: '#fea90a', textDecorationLine: 'underline' }}>Sign In</Text></Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  backgroundImage:{
-width:'100%',
-height:'100%',
-borderRadius: 30,
-  },
-    button: {
-        backgroundColor: '#fea90a',
-        paddingVertical: 15,
-        paddingHorizontal: 30,
-        width: '100%',
-        borderRadius: 30,
-        marginLeft: '0%',
-        marginTop: 20,
-        fontFamily: 'Montserrat-Regular',
-      },
-    
-      buttonText: {
-        color: 'white',
-        fontSize: 18,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        fontFamily: 'Montserrat-Regular',
-      },
   scrollView: {
     flexGrow: 1,
   },
   container: {
     flex: 1,
-    // justifyContent: 'center',
     alignItems: 'center',
-    marginTop:60,
+    marginTop: 60,
+  },
+  heading: {
+    fontSize: 28,
+    textAlign: 'center',
+    marginVertical: 65,
+    fontFamily: 'Montserrat-SemiBold',
+  },
+  sheading: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginVertical: -26,
+    fontFamily: 'Montserrat-Regular',
+  },
+  textField: {
+    marginVertical: 65,
+    paddingHorizontal: 30,
+    width: '100%',
   },
   label: {
     fontFamily: 'Montserrat-SemiBold',
     paddingHorizontal: 2,
   },
-  textField: {
-    marginVertical: 65,
-    paddingHorizontal: 30,
-    width: '100%', // Set the width to 100%
-  },
   input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    width: '100%', // Set the width to 100%
+    width: '100%',
     padding: 10,
     marginBottom: 16,
     borderRadius: 7,
@@ -180,18 +176,23 @@ borderRadius: 30,
   eyeIcon: {
     marginLeft: -17,
     marginTop: -10,
-    fontSize: 22, // Adjust the size as needed
+    fontSize: 22,
   },
-  heading: {
-    fontSize: 28,
-    textAlign: 'center',
-    marginVertical: 65,
-    fontFamily: 'Montserrat-SemiBold',
+  button: {
+    backgroundColor: '#fea90a',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    width: '100%',
+    borderRadius: 30,
+    marginLeft: '0%',
+    marginTop: 20,
+    fontFamily: 'Montserrat-Regular',
   },
-  sheading: {
+  buttonText: {
+    color: 'white',
     fontSize: 18,
+    fontWeight: 'bold',
     textAlign: 'center',
-    marginVertical: -26,
     fontFamily: 'Montserrat-Regular',
   },
 });

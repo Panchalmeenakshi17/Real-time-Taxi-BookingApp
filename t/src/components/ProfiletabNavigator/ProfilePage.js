@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import CustomIcon from '../components/CustomIcon';
+import CustomIcon from '../CustomIcon';
 
 const ProfilePage = ({ navigation }) => {
   const [userData, setUserData] = useState({
@@ -72,7 +72,7 @@ const ProfilePage = ({ navigation }) => {
       <View>
       <TouchableOpacity style={{ flexDirection:'row', justifyContent:'center', backgroundColor:'#abaaa96a', borderRadius:100,marginLeft:100, height:140, width:140, borderColor:'black'}}>
       <Image
-        source={require('../assets/app_images/p.jpg')}
+        source={require('../../assets/app_images/p.jpg')}
         style={styles.backgroundImage}
       />
       </TouchableOpacity>
