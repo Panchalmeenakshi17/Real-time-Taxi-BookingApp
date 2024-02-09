@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "790277514504",
+    "project_id": "cabdb-f94fb",
+    "storage_bucket": "cabdb-f94fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790277514504:android:404b4513042e15ff9ab8bd",
+        "android_client_info": {
+          "package_name": "com.t"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyq8vOFb3uYwUx70Dn6L-8hSMOV2W0CLU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
