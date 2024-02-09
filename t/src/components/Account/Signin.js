@@ -102,7 +102,7 @@ const ProfileScreen = ({ navigation }) => {
             onChangeText={handleGenderChange}
           />
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('Second')} style={styles.button}>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.button}>
           <Text style={styles.buttonText}>Update Profile</Text>
         </TouchableOpacity>
       </View>

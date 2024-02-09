@@ -35,19 +35,19 @@ const App = () => {
     <>
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown:false}}>
-      {/* <Stack.Screen name='IntroScreen' component={IntroScreen} options={{animation:  'fade_from_bottom'}}></Stack.Screen> */}
-          {/* <Stack.Screen name='GetStarted' component={GetStarted} options={{animation:  'fade_from_bottom'}}></Stack.Screen>
+        <Stack.Screen name='IntroScreen' component={IntroScreen} options={{animation:  'fade_from_bottom'}}></Stack.Screen>  
+            <Stack.Screen name='GetStarted' component={GetStarted} options={{animation:  'fade_from_bottom'}}></Stack.Screen>
           <Stack.Screen name='Map' component={Map} options={{animation:  'fade_from_bottom'}}></Stack.Screen>
    <Stack.Screen name='Second' component={Second} options={{animation: 'fade_from_bottom'}}></Stack.Screen>
     <Stack.Screen name='Third' component={Third} options={{animation: 'fade_from_bottom'}}></Stack.Screen>
     <Stack.Screen name='Fourth' component={Fourth} options={{animation: 'fade_from_bottom'}}></Stack.Screen>
     <Stack.Screen name='Signin' component={Signin} options={{animation: 'fade_from_bottom'}}></Stack.Screen>
-    <Stack.Screen name='Login' component={Login} options={{animation: 'fade_from_bottom'}}></Stack.Screen>  
-    <Stack.Screen name='Otp' component={Otp} options={{animation: 'fade_from_bottom'}}></Stack.Screen> */}
-    {/* <Stack.Screen name='Profile' component={Profile} options={{animation: 'fade_from_bottom'}}></Stack.Screen>   */}
-    {/* <Stack.Screen name='AppNavigator' component={AppNavigator} options={{animation: 'fade_from_bottom'}}></Stack.Screen>   */}
+    {/* <Stack.Screen name='Login' component={Login} options={{animation: 'fade_from_bottom'}}></Stack.Screen>   */}
+    <Stack.Screen name='Otp' component={Otp} options={{animation: 'fade_from_bottom'}}></Stack.Screen>  
+     <Stack.Screen name='Profile' component={Profile} options={{animation: 'fade_from_bottom'}}></Stack.Screen>   
+     <Stack.Screen name='AppNavigator' component={AppNavigator} options={{animation: 'fade_from_bottom'}}></Stack.Screen>   
     <Stack.Screen name='Login' component={Login} options={{animation: 'fade_from_bottom'}}></Stack.Screen> 
-          {/* <Stack.Screen name='ProfileScreen' component={ProfileScreen} options={{animation: 'slide_from_bottom'}}></Stack.Screen>   */}
+           <Stack.Screen name='ProfileScreen' component={ProfileScreen} options={{animation: 'slide_from_bottom'}}></Stack.Screen>   
     <Stack.Screen name='Destination' component={Destination} options={{animation: 'fade_from_bottom'}}></Stack.Screen>  
     <Stack.Screen name='Home' component={Home} options={{animation: 'fade_from_bottom'}}></Stack.Screen>  
           <Stack.Screen name='AfterDestination' component={AfterDestination} options={{animation: 'slide_from_bottom'}}></Stack.Screen>  
@@ -59,7 +59,7 @@ const App = () => {
         </Stack.Screen>  
         <Stack.Screen name='ProfilePage' component={ProfilePage} options={{animation: 'slide_from_bottom'}}>
         </Stack.Screen>  
-        <Stack.Screen name='Signin' component={Signin} options={{animation: 'fade_from_bottom'}}></Stack.Screen>
+        {/* <Stack.Screen name='Signin' component={Signin} options={{animation: 'fade_from_bottom'}}></Stack.Screen> */}
       </Stack.Navigator>
     </NavigationContainer>
     

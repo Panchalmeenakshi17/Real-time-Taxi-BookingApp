@@ -181,14 +181,7 @@ const ProfileScreen = ({ navigation }) => {
         />
       </View>
 
-      <View style={commonStyles.postsContainer}>
-        <Text style={commonStyles.postsTitle}>Your Posts:</Text>
-        {userPosts.map((post, index) => (
-          <Text key={index} style={commonStyles.postItem}>
-            {post.title}
-          </Text>
-        ))}
-      </View>
+       
 
       <View style={commonStyles.logoutButtonContainer}>
         <Button title="Logout" onPress={handleLogout} />
