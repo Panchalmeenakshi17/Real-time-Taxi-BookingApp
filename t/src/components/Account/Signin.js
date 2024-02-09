@@ -118,6 +118,13 @@ const Signin = ({ navigation }) => {
   
       // Check if the provided email is already in use
       const emailInUse = await isEmailInUse(email);
+      
+ Alert.alert(
+          'Email in Use',
+          'The provided email is already registered. Please use a new email or login using the existing one.',
+          [{ text: 'OK' }]
+        );
+
   
       if (!emailInUse) {
         // Create a new user account
@@ -144,7 +151,7 @@ const Signin = ({ navigation }) => {
           [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
         );
       } else {
-        // Display an alert if the email is already in use
+ 
         Alert.alert(
           'Email in Use',
           'The provided email is already registered. Please use a new email or login using the existing one.',
@@ -260,6 +267,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginLeft: '10%',
     marginTop: 20,
+    marginBottom:30,
     fontFamily: 'Montserrat-Regular',
   },
 
